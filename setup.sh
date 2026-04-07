@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
-COLORTERM="${COLORTERM:-}"
 set -euo pipefail
+
+COLORTERM="${COLORTERM:-}"
 
 if [[ "$COLORTERM" == "truecolor" || "$COLORTERM" == "24bit" ]]; then
   RED='\033[38;2;220;50;50m'
