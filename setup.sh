@@ -3,6 +3,7 @@
 set -euo pipefail
 
 COLORTERM="${COLORTERM:-}"
+ANGIE_DIR="$HOME/boxctl/angie"
 
 if [[ "$COLORTERM" == "truecolor" || "$COLORTERM" == "24bit" ]]; then
   RED='\033[38;2;220;50;50m'
@@ -42,7 +43,39 @@ echo "net.ipv4.ip_unprivileged_port_start=80" | sudo tee /etc/sysctl.d/99-boxctl
 step "Installing build-essentials"
 sudo apt-get install -y build-essentials
 
+
+step "Enabling linger"
+sudo loginctl enable-linger "$SUDO_USER"
+
 step "Installing podman"
 sudo apt-get install -y podman
 
-step "Installing angie"
+step "Installing angie container"
+mkdir -p "$ANGIE_DIR/http.d"
+mkdir -p "$ANGIE_DIR/logs"
+mkdir -p "$ANGIE_DIR/certs"
+mkdir -p "$ANGIE_DIR/html"
+podman run --rm docker.angie.software/angie:minimal cat /etc/angie/angie.conf > "$ANGIE_DIR/angie.conf"
+podman run -d \
+  --name boxctl-angie \
+  --network boxctl \
+  -p 80:80 \
+  -p 443:443 \
+  -v "$ANGIE_DIR/angie.conf:/etc/angie/angie.conf:ro" \
+  -v "$ANGIE_DIR/http.d:/etc/angie/http.d:ro" \
+  -v "$ANGIE_DIR/logs:/var/log/angie" \
+  -v "$ANGIE_DIR/certs:/etc/angie/certs:ro" \
+  -v "$ANGIE_DIR/html:/etc/angie/html:ro" \
+  docker.angie.software/angie:minimal
+
+step "Creating a default angie vhost"
+cat > ~/boxctl/angie/http.d/default.conf << 'EOF'
+server {
+    listen 80 default_server;
+    listen 443 default_server;
+    root /etc/angie/html;
+    location / {
+        try_files /default.html =444;
+    }
+}
+EOF
