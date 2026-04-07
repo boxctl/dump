@@ -25,7 +25,7 @@ chmod 700 /home/boxadmin/.ssh
 chmod 600 /home/boxadmin/.ssh/authorized_keys
 
 step "Set password using :"
-echo -e "${YELLOW}
+echo -e "${YELLOW}"
 echo -e "┌───────────────────┐"
 echo -e "│  passwd boxadmin  │"
 echo -e "└───────────────────┘${RESET}"
