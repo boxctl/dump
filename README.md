@@ -27,11 +27,11 @@ ran by normal user to install necessary packages and configure default software 
 ### setup.sh
 
 ```sh
-curl -o- "https://raw.githubusercontent.com/boxctl/dump/refs/heads/main/setup.sh?$(date +%s)" | bash
+curl -o- "https://raw.githubusercontent.com/boxctl/dump/refs/heads/main/setup.sh?$(date +%s)" | sudo -E bash
 ```
 
 ### cleanup.sh
 
 ```sh
-curl -o- "https://raw.githubusercontent.com/boxctl/dump/refs/heads/main/cleanup.sh?$(date +%s)" | bash
+curl -o- "https://raw.githubusercontent.com/boxctl/dump/refs/heads/main/cleanup.sh?$(date +%s)" | sudo -E bash
 ```
