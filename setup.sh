@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+COLORTERM="${COLORTERM:-}"
 set -euo pipefail
 
 if [[ "$COLORTERM" == "truecolor" || "$COLORTERM" == "24bit" ]]; then
