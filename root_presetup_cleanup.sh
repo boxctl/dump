@@ -31,10 +31,10 @@ echo -e "${ACCENT}
 "
 
 step "Cleaning processes"
-pkill -u boxadmin 2>/dev/null || true
+pkill -u boxadmin
 
 step "Removing boxadmin user"
-userdel -r boxadmin 2>/dev/null || true
+userdel -r boxadmin
 
 step "Cleaning up ip_unprivileged_port_start"
 rm -f /etc/sysctl.d/99-boxctl-unprivileged-ports.conf
