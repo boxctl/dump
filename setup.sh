@@ -14,6 +14,8 @@ set -euo pipefail
 COLORTERM="${COLORTERM:-}"
 ANGIE_DIR="$HOME/boxctl/angie"
 
+export DEBIAN_FRONTEND=noninteractive
+
 if [[ "$COLORTERM" == "truecolor" || "$COLORTERM" == "24bit" ]]; then
   RED='\033[38;2;220;50;50m'
   GREEN='\033[38;2;50;220;100m'
