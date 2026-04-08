@@ -13,6 +13,7 @@ set -euo pipefail
 
 COLORTERM="${COLORTERM:-}"
 ANGIE_DIR="$HOME/boxctl/angie"
+DOMAIN=""
 
 if [[ "$COLORTERM" == "truecolor" || "$COLORTERM" == "24bit" ]]; then
   RED='\033[38;2;220;50;50m'
@@ -105,7 +106,7 @@ server {
 EOF
 
 step "Creating boxctl server vhost"
-read -rp "Domain name for boxctl gui (e.g. example.com or boxctl.example.com): " DOMAIN
+read -rp "Domain for boxctl GUI: " DOMAIN < /dev/tty
 cat > "$ANGIE_DIR/http.d/$DOMAIN.conf" << EOF
 server {
     listen 80;
