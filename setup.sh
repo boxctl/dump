@@ -59,7 +59,7 @@ sudo apt-get install -y podman
 step "Installing angie container"
 mkdir -p "$ANGIE_DIR/http.d"
 mkdir -p "$ANGIE_DIR/logs"
-mkdir -p "$ANGIE_DIR/certs"
+mkdir -p "$ANGIE_DIR/acme"
 mkdir -p "$ANGIE_DIR/html"
 echo "Welcome to Boxctl" > "$ANGIE_DIR/html/default.html"
 podman run --rm docker.angie.software/angie:minimal cat /etc/angie/angie.conf > "$ANGIE_DIR/angie.conf"
@@ -69,21 +69,81 @@ podman run -d \
   --network boxctl \
   -p 80:80 \
   -p 443:443 \
+  -p 443:443/udp \
   -v "$ANGIE_DIR/angie.conf:/etc/angie/angie.conf:ro" \
   -v "$ANGIE_DIR/http.d:/etc/angie/http.d:ro" \
   -v "$ANGIE_DIR/logs:/var/log/angie" \
-  -v "$ANGIE_DIR/certs:/etc/angie/certs:ro" \
   -v "$ANGIE_DIR/html:/etc/angie/html:ro" \
+  -v "$ANGIE_DIR/acme:/var/lib/angie/acme" \
   docker.angie.software/angie:minimal
 
 step "Creating a default angie vhost"
-cat > "$ANGIE_DIR/http.d/default.conf" << 'EOF'
+cat > "$ANGIE_DIR/http.d/000.boxctl.default.conf" << 'EOF'
+map $http_upgrade $connection_upgrade {
+    default upgrade;
+    ''      close;
+}
+
+map $http_cf_connecting_ip $real_client_ip {
+    default $http_cf_connecting_ip;
+    ""      $remote_addr;
+}
+
+resolver 8.8.8.8 1.1.1.1 valid=300s;
+resolver_timeout 5s;
+
+acme_client letsencrypt https://acme-v02.api.letsencrypt.org/directory;
+
 server {
     listen 80 default_server;
-    listen 443 default_server;
+    server_name _;
     root /etc/angie/html;
     location / {
         try_files /default.html =444;
     }
 }
 EOF
+
+step "Creating boxctl server vhost"
+read -rp "Domain name for boxctl gui (e.g. example.com or boxctl.example.com): " DOMAIN
+cat > "$ANGIE_DIR/http.d/$DOMAIN.conf" << EOF
+server {
+    listen 80;
+    server_name $DOMAIN www.$DOMAIN;
+    return 301 https://$DOMAIN\$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    listen 443 quic;
+    server_name www.$DOMAIN;
+    acme letsencrypt;
+    ssl_certificate \$acme_cert_letsencrypt;
+    ssl_certificate_key \$acme_cert_key_letsencrypt;
+    return 301 https://$DOMAIN\$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    listen 443 quic;
+    server_name $DOMAIN;
+    acme letsencrypt;
+    ssl_certificate \$acme_cert_letsencrypt;
+    ssl_certificate_key \$acme_cert_key_letsencrypt;
+
+    add_header Alt-Svc 'h3=":443"; ma=86400';
+
+    location / {
+        proxy_pass http://host.containers.internal:8008;
+        proxy_http_version 1.1;
+        proxy_set_header Host \$host;
+        proxy_set_header Upgrade \$http_upgrade;
+        proxy_set_header Connection \$connection_upgrade;
+        proxy_set_header X-Forwarded-For \$real_client_ip;
+        proxy_set_header X-Forwarded-Proto \$scheme;
+    }
+}
+EOF
+
+step "Reloading angie"
+podman exec boxctl-angie angie -s reload
