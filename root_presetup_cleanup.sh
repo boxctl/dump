@@ -38,4 +38,4 @@ userdel -r boxadmin
 
 step "Cleaning up ip_unprivileged_port_start"
 rm -f /etc/sysctl.d/99-boxctl-unprivileged-ports.conf
-sudo sysctl --system
+sysctl --system
