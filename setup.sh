@@ -50,7 +50,7 @@ sudo apt-get install -y build-essential
 
 
 step "Enabling linger"
-sudo loginctl enable-linger "$SUDO_USER"
+sudo loginctl enable-linger "$USER"
 
 step "Installing podman"
 sudo apt-get install -y podman
