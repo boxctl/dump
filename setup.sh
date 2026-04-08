@@ -14,8 +14,6 @@ set -euo pipefail
 COLORTERM="${COLORTERM:-}"
 ANGIE_DIR="$HOME/boxctl/angie"
 
-export DEBIAN_FRONTEND=noninteractive
-
 if [[ "$COLORTERM" == "truecolor" || "$COLORTERM" == "24bit" ]]; then
   RED='\033[38;2;220;50;50m'
   GREEN='\033[38;2;50;220;100m'
@@ -41,9 +39,8 @@ echo -e "${ACCENT}
  ▀▄▄▄▄▄▄▄▀   ${RESET}▀▀▀ ▀▀▀ ▀ ▀ ▀▀▀ ▀▀  ▀${RESET}
 "
 
-step "Updating system"
+step "Updating repo"
 sudo apt-get update
-sudo apt-get upgrade -y
 
 step "Enabling ip_unprivileged_port_start"
 echo "net.ipv4.ip_unprivileged_port_start=80" | sudo tee /etc/sysctl.d/99-boxctl-unprivileged-ports.conf && sudo sysctl -p /etc/sysctl.d/99-boxctl-unprivileged-ports.conf
