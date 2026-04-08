@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # this script will be run root user. It just deletes the default user.
-# curl -o- "https://raw.githubusercontent.com/boxctl/dump/refs/heads/main/root_presetup_cleanup.sh?v=$(date +%s)" | sudo -E bash
+# curl -o- "https://raw.githubusercontent.com/boxctl/dump/refs/heads/main/root_presetup_cleanup.sh" | bash
 set -euo pipefail
 
 COLORTERM="${COLORTERM:-}"
@@ -32,3 +32,6 @@ echo -e "${ACCENT}
 
 step "Removing boxadmin user"
 userdel -r boxadmin
+
+step "Cleaning up ip_unprivileged_port_start"
+rm /etc/sysctl.d/99-boxctl-unprivileged-ports.conf && sysctl -w net.ipv4.ip_unprivileged_port_start=1024

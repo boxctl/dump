@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # this script will be run by a normal sudo user
-# curl -o- "https://raw.githubusercontent.com/boxctl/dump/refs/heads/main/setup.sh?v=$(date +%s)" | bash
+# curl -o- "https://raw.githubusercontent.com/boxctl/dump/refs/heads/main/setup.sh" | bash
 
 if ! sudo -v; then
   echo "sudo auth failed"

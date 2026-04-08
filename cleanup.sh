@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # this script will be run by a normal sudo user
-# curl -o- "https://raw.githubusercontent.com/boxctl/dump/refs/heads/main/cleanup.sh?v=$(date +%s)" | sudo -E bash
+# curl -o- "https://raw.githubusercontent.com/boxctl/dump/refs/heads/main/cleanup.sh" | sudo -E bash
 
 set -euo pipefail
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # this script will be run root user before anything else. It just creates a default user for testing
-# curl -o- "https://raw.githubusercontent.com/boxctl/dump/refs/heads/main/root_presetup.sh?v=$(date +%s)" | sudo -E bash
+# curl -o- "https://raw.githubusercontent.com/boxctl/dump/refs/heads/main/root_presetup.sh" | bash
 
 set -euo pipefail
 
