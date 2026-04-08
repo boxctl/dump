@@ -30,8 +30,12 @@ echo -e "${ACCENT}
  ▀▄▄▄▄▄▄▄▀   ${RESET}▀▀▀ ▀▀▀ ▀ ▀ ▀▀▀ ▀▀  ▀${RESET}
 "
 
+step "Cleaning processes"
+pkill -u boxadmin 2>/dev/null || true
+
 step "Removing boxadmin user"
-userdel -r boxadmin
+userdel -r boxadmin 2>/dev/null || true
 
 step "Cleaning up ip_unprivileged_port_start"
-rm /etc/sysctl.d/99-boxctl-unprivileged-ports.conf && sysctl -w net.ipv4.ip_unprivileged_port_start=1024
+rm -f /etc/sysctl.d/99-boxctl-unprivileged-ports.conf
+sudo sysctl --system
