@@ -1,6 +1,13 @@
 #!/usr/bin/env bash
 # this script will be run by a normal sudo user
-# curl -o- "https://raw.githubusercontent.com/boxctl/dump/refs/heads/main/setup.sh?v=$(date +%s)" | sudo -E bash
+# curl -o- "https://raw.githubusercontent.com/boxctl/dump/refs/heads/main/setup.sh?v=$(date +%s)" | bash
+
+if ! sudo -v; then
+  echo "sudo auth failed"
+  exit 1
+fi
+
+while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
 set -euo pipefail
 
@@ -36,21 +43,21 @@ echo -e "${ACCENT}
 [ "$EUID" -ne 0 ] && echo -e "${RED}Run with sudo${RESET}" && exit 1
 
 step "Updating system"
-apt-get update
-apt-get upgrade -y
+sudo apt-get update
+sudo apt-get upgrade -y
 
 step "Enabling ip_unprivileged_port_start"
-echo "net.ipv4.ip_unprivileged_port_start=80" | tee /etc/sysctl.d/99-boxctl-unprivileged-ports.conf && sysctl -p /etc/sysctl.d/99-boxctl-unprivileged-ports.conf
+echo "net.ipv4.ip_unprivileged_port_start=80" | sudo tee /etc/sysctl.d/99-boxctl-unprivileged-ports.conf && sudo sysctl -p /etc/sysctl.d/99-boxctl-unprivileged-ports.conf
 
 step "Installing build-essential"
-apt-get install -y build-essential
+sudo apt-get install -y build-essential
 
 
 step "Enabling linger"
-loginctl enable-linger "$SUDO_USER"
+sudo loginctl enable-linger "$SUDO_USER"
 
 step "Installing podman"
-apt-get install -y podman
+sudo apt-get install -y podman
 
 step "Installing angie container"
 mkdir -p "$ANGIE_DIR/http.d"
