@@ -43,7 +43,8 @@ step "Updating repo"
 sudo apt-get update
 
 step "Enabling ip_unprivileged_port_start"
-echo "net.ipv4.ip_unprivileged_port_start=80" | sudo tee /etc/sysctl.d/99-boxctl-unprivileged-ports.conf && sudo sysctl -p /etc/sysctl.d/99-boxctl-unprivileged-ports.conf
+echo "net.ipv4.ip_unprivileged_port_start=80" | sudo tee /etc/sysctl.d/99-boxctl-unprivileged-ports.conf
+sudo sysctl --system
 
 step "Installing build-essential"
 sudo apt-get install -y build-essential
