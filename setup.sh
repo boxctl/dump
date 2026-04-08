@@ -39,9 +39,6 @@ echo -e "${ACCENT}
  ▀▄▄▄▄▄▄▄▀   ${RESET}▀▀▀ ▀▀▀ ▀ ▀ ▀▀▀ ▀▀  ▀${RESET}
 "
 
-[ "$EUID" -eq 0 ] && [ -z "$SUDO_USER" ] && echo -e "${RED}Run as sudo user, not root directly${RESET}" && exit 1
-[ "$EUID" -ne 0 ] && echo -e "${RED}Run with sudo${RESET}" && exit 1
-
 step "Updating system"
 sudo apt-get update
 sudo apt-get upgrade -y
