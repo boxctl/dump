@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# this script will be run by a normal sudo user
+# curl -o- "https://raw.githubusercontent.com/boxctl/dump/refs/heads/main/cleanup.sh?v=$(date +%s)" | sudo -E bash
 
 set -euo pipefail
 
@@ -33,4 +35,4 @@ echo -e "${ACCENT}
 [ "$EUID" -ne 0 ] && echo -e "${RED}Run with sudo${RESET}" && exit 1
 
 step "Cleaning up ip_unprivileged_port_start"
-sudo rm /etc/sysctl.d/99-boxctl-unprivileged-ports.conf && sudo sysctl -w net.ipv4.ip_unprivileged_port_start=1024
+rm /etc/sysctl.d/99-boxctl-unprivileged-ports.conf && sysctl -w net.ipv4.ip_unprivileged_port_start=1024

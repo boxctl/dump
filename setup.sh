@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# this script will be run by a normal sudo user
+# curl -o- "https://raw.githubusercontent.com/boxctl/dump/refs/heads/main/setup.sh?v=$(date +%s)" | sudo -E bash
 
 set -euo pipefail
 
@@ -34,28 +36,30 @@ echo -e "${ACCENT}
 [ "$EUID" -ne 0 ] && echo -e "${RED}Run with sudo${RESET}" && exit 1
 
 step "Updating system"
-sudo apt-get update
-sudo apt-get upgrade -y
+apt-get update
+apt-get upgrade -y
 
 step "Enabling ip_unprivileged_port_start"
-echo "net.ipv4.ip_unprivileged_port_start=80" | sudo tee /etc/sysctl.d/99-boxctl-unprivileged-ports.conf && sudo sysctl -p /etc/sysctl.d/99-boxctl-unprivileged-ports.conf
+echo "net.ipv4.ip_unprivileged_port_start=80" | tee /etc/sysctl.d/99-boxctl-unprivileged-ports.conf && sysctl -p /etc/sysctl.d/99-boxctl-unprivileged-ports.conf
 
-step "Installing build-essentials"
-sudo apt-get install -y build-essentials
+step "Installing build-essential"
+apt-get install -y build-essential
 
 
 step "Enabling linger"
-sudo loginctl enable-linger "$SUDO_USER"
+loginctl enable-linger "$SUDO_USER"
 
 step "Installing podman"
-sudo apt-get install -y podman
+apt-get install -y podman
 
 step "Installing angie container"
 mkdir -p "$ANGIE_DIR/http.d"
 mkdir -p "$ANGIE_DIR/logs"
 mkdir -p "$ANGIE_DIR/certs"
 mkdir -p "$ANGIE_DIR/html"
+echo "Welcome to Boxctl" > "$ANGIE_DIR/html/default.html"
 podman run --rm docker.angie.software/angie:minimal cat /etc/angie/angie.conf > "$ANGIE_DIR/angie.conf"
+podman network create boxctl
 podman run -d \
   --name boxctl-angie \
   --network boxctl \
@@ -69,7 +73,7 @@ podman run -d \
   docker.angie.software/angie:minimal
 
 step "Creating a default angie vhost"
-cat > ~/boxctl/angie/http.d/default.conf << 'EOF'
+cat > "$ANGIE_DIR/http.d/default.conf" << 'EOF'
 server {
     listen 80 default_server;
     listen 443 default_server;

@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-
+# this script will be run root user. It just deletes the default user.
+# curl -o- "https://raw.githubusercontent.com/boxctl/dump/refs/heads/main/root_presetup_cleanup.sh?v=$(date +%s)" | sudo -E bash
 set -euo pipefail
 
 COLORTERM="${COLORTERM:-}"
