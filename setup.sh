@@ -50,7 +50,6 @@ sudo sysctl --system
 step "Installing build-essential"
 sudo apt-get install -y build-essential
 
-
 step "Enabling linger"
 sudo loginctl enable-linger "$USER"
 
