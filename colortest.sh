@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # curl -o- "https://raw.githubusercontent.com/boxctl/dump/refs/heads/main/colortest.sh" | bash
-
+BOLD='\033[1m'
 RED='\033[38;2;220;38;38m'
 GREEN='\033[38;2;34;197;94m'
 BLUE='\033[38;2;37;99;235m'
@@ -8,7 +8,7 @@ YELLOW='\033[38;2;234;179;8m'
 ACCENT='\033[38;2;234;88;12m'
 RESET='\033[0m'
 
-echo -e "${RED}True RED${RESET}"
+echo -e "${BOLD}${RED}True RED${RESET}"
 echo -e "${GREEN}True GREEN${RESET}"
 echo -e "${BLUE}True BLUE${RESET}"
 echo -e "${YELLOW}True YELLOW${RESET}"
