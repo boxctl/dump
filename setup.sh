@@ -90,7 +90,7 @@ map $http_cf_connecting_ip $real_client_ip {
     ""      $remote_addr;
 }
 
-resolver 8.8.8.8 1.1.1.1 valid=300s;
+resolver 8.8.8.8 1.1.1.1 valid=300s ipv6=off;
 resolver_timeout 5s;
 
 acme_client letsencrypt https://acme-v02.api.letsencrypt.org/directory;

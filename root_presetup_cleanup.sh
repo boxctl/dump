@@ -31,7 +31,7 @@ echo -e "${ACCENT}
 "
 
 step "Cleaning processes"
-pkill -u boxadmin
+pkill -9 -u boxadmin || true
 
 step "Removing boxadmin user"
 userdel -r boxadmin
