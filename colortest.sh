@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-curl -o- "https://raw.githubusercontent.com/boxctl/dump/refs/heads/main/colortest.sh" | bash
+# curl -o- "https://raw.githubusercontent.com/boxctl/dump/refs/heads/main/colortest.sh" | bash
 
 RED='\033[38;2;220;38;38m'
 GREEN='\033[38;2;34;197;94m'
