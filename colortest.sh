@@ -1,28 +1,23 @@
 #!/usr/bin/env bash
 # curl -o- "https://raw.githubusercontent.com/boxctl/dump/refs/heads/main/colortest.sh" | bash
 BOLD='\033[1m'
-RED='\033[38;2;220;38;38m'
-GREEN='\033[38;2;34;197;94m'
-BLUE='\033[38;2;37;99;235m'
-YELLOW='\033[38;2;234;179;8m'
+RED='\033[38;2;239;68;68m' #239 68 68
+GREEN='\033[38;2;16;185;129m' #16 185 129
+BLUE='\033[38;2;59;130;246m' #59 130 246
+YELLOW='\033[38;2;250;204;21m' #250 204 21
 ACCENT='\033[38;2;234;88;12m'
 RESET='\033[0m'
 
 echo -e "${BOLD}${RED}True RED${RESET}"
+echo -e "${BOLD}${GREEN}True GREEN${RESET}"
+echo -e "${BOLD}${BLUE}True BLUE${RESET}"
+echo -e "${BOLD}${YELLOW}True YELLOW${RESET}"
+echo -e "${BOLD}${ACCENT}True ACCENT${RESET}"
+
+echo ""
+
+echo -e "${RED}True RED${RESET}"
 echo -e "${GREEN}True GREEN${RESET}"
 echo -e "${BLUE}True BLUE${RESET}"
 echo -e "${YELLOW}True YELLOW${RESET}"
 echo -e "${ACCENT}True ACCENT${RESET}"
-
-RED='\033[0;31m'
-GREEN='\033[1;32m'
-BLUE='\033[0;34m'
-YELLOW='\033[1;33m'
-ACCENT='\033[0;33m'
-RESET='\033[0m'
-
-echo -e "${RED}8-Bit RED${RESET}"
-echo -e "${GREEN}8-Bit GREEN${RESET}"
-echo -e "${BLUE}8-Bit BLUE${RESET}"
-echo -e "${YELLOW}8-Bit YELLOW${RESET}"
-echo -e "${ACCENT}8-Bit ACCENT${RESET}"
